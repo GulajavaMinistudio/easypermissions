@@ -9,9 +9,13 @@ EasyPermissions is installed by adding the following dependency to your `build.g
 
 ```groovy
 dependencies {
-    implementation 'pub.devrel:easypermissions:1.0.1'
+    implementation 'pub.devrel:easypermissions:1.1.1'
 }
 ```
+
+Note that EasyPermissions depends on Android Support Library `27.0.1` so you will need to use
+`compileSdkVersion 27` or higher. This change should be safe as `compileSdkVersion` does not change
+app behavior.
 
 ## Usage
 
@@ -50,8 +54,8 @@ The example below shows how to request permissions for a method that requires bo
     necessary. The request code provided should be unique to this request, and the method
     can take any number of permissions as its final argument.
   * Use of the `AfterPermissionGranted` annotation. This is optional, but provided for
-    convenience. If all of the permissions in a given request are granted, any methods
-    annotated with the proper request code will be executed. This is to simplify the common
+    convenience. If all of the permissions in a given request are granted, *all* methods
+    annotated with the proper request code will be executed(be sure to have an unique request code). The annotated method needs to be *void* and *without input parameters* (instead, you can use *onSaveInstanceState* in order to keep the state of your suppressed parameters). This is to simplify the common
     flow of needing to run the requesting method after all of its permissions have been granted.
     This can also be achieved by adding logic on the `onPermissionsGranted` callback.
 
@@ -68,6 +72,18 @@ private void methodRequiresTwoPermission() {
                 RC_CAMERA_AND_LOCATION, perms);
     }
 }
+```
+
+Or for finer control over the rationale dialog, use a `PermissionRequest`:
+
+```java
+EasyPermissions.requestPermissions(
+        new PermissionRequest.Builder(this, RC_CAMERA_AND_LOCATION, perms)
+                .setRationale(R.string.camera_and_location_rationale)
+                .setPositiveButtonText(R.string.rationale_ask_ok)
+                .setNegativeButtonText(R.string.rationale_ask_cancel)
+                .setTheme(R.style.my_fancy_style)
+                .build());
 ```
 
 Optionally, for a finer control, you can have your `Activity` / `Fragment` implement
