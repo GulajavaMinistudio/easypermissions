@@ -9,11 +9,11 @@ EasyPermissions is installed by adding the following dependency to your `build.g
 
 ```groovy
 dependencies {
-    implementation 'pub.devrel:easypermissions:1.1.3'
+    implementation 'pub.devrel:easypermissions:1.2.0'
 }
 ```
 
-Note that EasyPermissions depends on Android Support Library `27.0.2` so you will need to use
+Note that EasyPermissions depends on Android Support Library `27.1.0` so you will need to use
 `compileSdkVersion 27` or higher. This change should be safe as `compileSdkVersion` does not change
 app behavior.
 
@@ -151,6 +151,26 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 }
 ```
+
+### Interacting with the rationale dialog
+
+Implement the `EasyPermissions.RationaleCallbacks` if you want to interact with the rationale dialog.
+
+```java
+@Override
+public void onRationaleAccepted(int requestCode) {
+    // Rationale accpets to request some permissions
+    // ...
+}
+
+@Override
+public void onRationaleDenied(int requestCode) {
+    // Rationale denied to request some permissions
+    // ...
+}
+```
+
+Rationale callbacks don't necessarily imply permission changes. To check for those, see the `EasyPermissions.PermissionCallbacks`.
 
 ## LICENSE
 
